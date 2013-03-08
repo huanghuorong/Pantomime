@@ -1,1 +1,22 @@
 See Documentation/README.
+
+    最近公司在做IOS手机邮箱客户端,一直是用MailCore开发的,但是MailCore对POP3协议的功能这块没有编写,只提供了IMAP协议的功能,自己尝试过编写,但是还是有很多BUG,所以在Github.com上找到了Pantomime的IOS版本,然后新建了测试的工程TestDemo,为了把这个框架正确的搭建到这个工程中,遇到了不少的问题.
+
+首先是各种找不到头文件问题,之后在Xcode-->选中TARGETS-->Build settings-->Search Paths中的
+Header Search Path中添加: "$(SRCROOT)/Pantomime/Framework"和 "$(SRCROOT)/Pantomime/Framework/OpenSSL/Headers"
+Library Search Path中添加: $(inherited) 和  "$(SRCROOT)/Pantomime/Framework/OpenSSL"
+
+OK了,头文件找不到的问题解决了,这里要注意的是Pantomime框架是放在我的测试工程TestDemo的文件夹下的,否则路径就不是这么设置了.
+
+再编译的时候又出问题了,包错:
+
+Undefined symbols for architecture i386:
+"_OBJC_CLASS_$_xxxx", referenced from:
+objc-class-ref in xxxx.o
+
+这里的xxxx就是某个类名或者方法名了,看到Undefined symbols for architecture i386,那就要在
+Xcode-->选中TARGETS-->Build Phases-->Compile Sources中的添加那些需要用却没有包含进来的类,这里点击+号添加,选择Add Other,把Pantomime/Framework/Pantomime文件夹下的类全部加入进来,然后再编译,OK了神奇.
+
+移动开发QQ群:278117443  174728495  198227198 
+
+@see http://www.cnblogs.com/wangwei123/archive/2012/12/07/2807610.html
